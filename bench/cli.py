@@ -47,7 +47,11 @@ def check_uid():
 		sys.exit(1)
 
 def cmd_requires_root():
+<<<<<<< HEAD
 	if len(sys.argv) > 2 and sys.argv[2] in ('production', 'sudoers', 'lets-encrypt', 'fonts', 'reload-nginx'):
+=======
+	if len(sys.argv) > 2 and sys.argv[2] in ('production', 'sudoers', 'lets-encrypt', 'fonts', 'reload-nginx', 'firewall', 'ssh-port'):
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	    return True
 	if len(sys.argv) >= 2 and sys.argv[1] in ('patch', 'renew-lets-encrypt', 'disable-production'):
 	    return True

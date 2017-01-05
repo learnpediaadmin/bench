@@ -15,10 +15,18 @@ from bench import patches
 @click.option('--requirements',is_flag=True, help="Update requirements")
 @click.option('--restart-supervisor',is_flag=True, help="restart supervisor processes after update")
 @click.option('--auto',is_flag=True)
+<<<<<<< HEAD
 @click.option('--upgrade',is_flag=True)
 @click.option('--no-backup',is_flag=True)
 @click.option('--force',is_flag=True)
 def update(pull=False, patch=False, build=False, bench=False, auto=False, restart_supervisor=False, requirements=False, no_backup=False, upgrade=False, force=False):
+=======
+@click.option('--upgrade',is_flag=True, help="Required for major version updates")
+@click.option('--no-backup',is_flag=True)
+@click.option('--force',is_flag=True)
+@click.option('--reset', is_flag=True, help="Hard resets git branch's to their new states overriding any changes and overriding rebase on pull")
+def update(pull=False, patch=False, build=False, bench=False, auto=False, restart_supervisor=False, requirements=False, no_backup=False, upgrade=False, force=False, reset=False):
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	"Update bench"
 
 	if not (pull or patch or build or bench or requirements):
@@ -39,7 +47,12 @@ def update(pull=False, patch=False, build=False, bench=False, auto=False, restar
 				'requirements': requirements,
 				'no-backup': no_backup,
 				'restart-supervisor': restart_supervisor,
+<<<<<<< HEAD
 				'upgrade': upgrade
+=======
+				'upgrade': upgrade,
+				'reset':reset
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 		})
 
 	if conf.get('release_bench'):
@@ -57,10 +70,17 @@ def update(pull=False, patch=False, build=False, bench=False, auto=False, restar
 		print "You can stay on the latest stable release by running `bench switch-to-master` or pin your bench to {0} by running `bench switch-to-v{0}`".format(version_upgrade[1])
 		sys.exit(1)
 
+<<<<<<< HEAD
 	_update(pull, patch, build, bench, auto, restart_supervisor, requirements, no_backup, upgrade, force=force)
 
 
 def _update(pull=False, patch=False, build=False, update_bench=False, auto=False, restart_supervisor=False, requirements=False, no_backup=False, upgrade=False, bench_path='.', force=False):
+=======
+	_update(pull, patch, build, bench, auto, restart_supervisor, requirements, no_backup, upgrade, force=force, reset=reset)
+
+
+def _update(pull=False, patch=False, build=False, update_bench=False, auto=False, restart_supervisor=False, requirements=False, no_backup=False, upgrade=False, bench_path='.', force=False, reset=False):
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	conf = get_config(bench_path=bench_path)
 	version_upgrade = is_version_upgrade(bench_path=bench_path)
 
@@ -73,7 +93,11 @@ def _update(pull=False, patch=False, build=False, update_bench=False, auto=False
 	before_update(bench_path=bench_path, requirements=requirements)
 
 	if pull:
+<<<<<<< HEAD
 		pull_all_apps(bench_path=bench_path)
+=======
+		pull_all_apps(bench_path=bench_path, reset=reset)
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 
 	if requirements:
 		update_requirements(bench_path=bench_path)

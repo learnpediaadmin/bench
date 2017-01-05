@@ -8,10 +8,13 @@
     - xorg-x11-fonts-Type1
   when: ansible_os_family == 'RedHat'
 
+<<<<<<< HEAD
 - name: Install wkhtmltopdf rpm
   yum: name=http://download.gna.org/wkhtmltopdf/0.12/{{ wkhtmltopdf_version }}/wkhtmltox-{{ wkhtmltopdf_version }}_linux-centos{{ ansible_distribution_major_version  }}-{{ "amd64" if ansible_architecture == "x86_64" else "i386"}}.rpm
   when: ansible_os_family == 'RedHat'
 
+=======
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 - name: install base fonts
   apt: name={{ item }} state=present
   with_items:
@@ -21,6 +24,7 @@
     - xfonts-base
   when: ansible_os_family == 'Debian'
 
+<<<<<<< HEAD
 - name: Download wkhtmltopdf
   get_url:
     url=http://download.gna.org/wkhtmltopdf/0.12/{{ wkhtmltopdf_version }}/wkhtmltox-{{ wkhtmltopdf_version }}_linux-{{ ansible_distribution_release }}-{{ "amd64" if ansible_architecture == "x86_64" else "i386"}}.deb
@@ -30,3 +34,13 @@
 - name: Install wkhtmltopdf deb
   apt: deb=/tmp/wkhtmltox-{{ wkhtmltopdf_version }}_linux-{{ ansible_distribution_release }}-{{ "amd64" if ansible_architecture == "x86_64" else "i386"}}.deb
   when: ansible_os_family == 'Debian'
+=======
+- name: download wkthmltox linux
+  get_url: url=http://download.gna.org/wkhtmltopdf/0.12/0.12.3/wkhtmltox-0.12.3_linux-generic-{{ "amd64" if ansible_architecture == "x86_64" else "i386"}}.tar.xz dest=/tmp/wkhtmltox.tar.xz
+
+- name: unarchive wkhtmltopdf
+  unarchive: src=/tmp/wkhtmltox.tar.xz dest=/tmp/wkhtmltox
+
+- name: move to /usr/local/bin
+  command: creates="/usr/local/bin/wkhtmltopdf" mv /tmp/wkhtmltox/bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863

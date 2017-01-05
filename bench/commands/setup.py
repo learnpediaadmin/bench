@@ -75,6 +75,7 @@ def setup_env():
 	from bench.utils import setup_env
 	setup_env()
 
+<<<<<<< HEAD
 
 @click.command('lets-encrypt')
 @click.argument('site')
@@ -82,6 +83,35 @@ def setup_letsencrypt(site):
 	"Setup lets-encrypt for site"
 	from bench.config.lets_encrypt import setup_letsencrypt
 	setup_letsencrypt(site, bench_path='.')
+=======
+@click.command('firewall')
+def setup_firewall():
+	"Setup firewall"
+	from bench.utils import run_playbook
+	click.confirm('Setting up the firewall will block all ports except 80, 443 and 22\n'
+		'Do you want to continue?',
+		abort=True)
+	run_playbook('production/setup_firewall.yml')
+
+@click.command('ssh-port')
+@click.argument('port')
+def set_ssh_port(port):
+	"Set SSH Port"
+	from bench.utils import run_playbook
+	click.confirm('This will change your SSH Port to {}\n'
+		'Do you want to continue?'.format(port),
+		abort=True)
+	run_playbook('production/change_ssh_port.yml', {"ssh_port": port})
+
+
+@click.command('lets-encrypt')
+@click.argument('site')
+@click.option('--custom-domain')
+def setup_letsencrypt(site, custom_domain):
+	"Setup lets-encrypt for site"
+	from bench.config.lets_encrypt import setup_letsencrypt
+	setup_letsencrypt(site, custom_domain, bench_path='.')
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 
 
 @click.command('procfile')
@@ -170,3 +200,8 @@ setup.add_command(setup_fonts)
 setup.add_command(add_domain)
 setup.add_command(remove_domain)
 setup.add_command(sync_domains)
+<<<<<<< HEAD
+=======
+setup.add_command(setup_firewall)
+setup.add_command(set_ssh_port)
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863

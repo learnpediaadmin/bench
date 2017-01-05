@@ -29,7 +29,11 @@ def generate_config(bench_path):
 	write_redis_config(
 		template_name='redis_cache.conf',
 		context={
+<<<<<<< HEAD
 			"maxmemory": config.get('cache_maxmemory', '50'),
+=======
+			"maxmemory": config.get('cache_maxmemory', get_max_redis_memory()),
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 			"port": ports['redis_cache'],
 			"redis_version": get_redis_version(),
 		},
@@ -60,3 +64,17 @@ def get_redis_version():
 
 	version = semantic_version.Version(version[0], partial=True)
 	return float('{major}.{minor}'.format(major=version.major, minor=version.minor))
+<<<<<<< HEAD
+=======
+
+def get_max_redis_memory():
+	import psutil
+	
+	total_virtual_mem = psutil.virtual_memory().total/(pow(1024, 2))
+	max_memory = int(total_virtual_mem * 0.05) # Max memory for redis is 5% of virtual memory
+
+	if max_memory < 50:
+		return 50
+	else:
+		return max_memory
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863

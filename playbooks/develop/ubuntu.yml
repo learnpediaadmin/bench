@@ -5,7 +5,10 @@
     bench_path: "/home/{{ ansible_user_id }}/frappe-bench"
     mysql_config_template: "templates/simple_mariadb_config.cnf"
     mysql_conf_dir: /etc/mysql/conf.d/
+<<<<<<< HEAD
     wkhtmltopdf_version: 0.12.2.1
+=======
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 
   tasks:
 
@@ -37,6 +40,13 @@
       # Ensure apt-transport-https
       - apt-transport-https
 
+<<<<<<< HEAD
+=======
+      # Python LDAP
+      - libsasl2-dev
+      - libldap2-dev
+      
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
     become: yes
     become_user: root
 
@@ -89,7 +99,11 @@
   - include: includes/mariadb_ubuntu.yml
 
   # install WKHTMLtoPDF
+<<<<<<< HEAD
   - include: includes/wkhtmltopdf_ubuntu_debian.yml
+=======
+  - include: includes/wkhtmltopdf.yml
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 
   # setup MariaDB
   - include: includes/setup_mariadb.yml

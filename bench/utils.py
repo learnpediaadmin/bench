@@ -498,7 +498,12 @@ def run_frappe_cmd(*args, **kwargs):
 		return_code = p.wait()
 
 	if return_code > 0:
+<<<<<<< HEAD
 		raise CommandFailedError(args)
+=======
+		sys.exit(return_code)
+		#raise CommandFailedError(args)
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 
 def get_frappe_cmd_output(*args, **kwargs):
 	bench_path = kwargs.get('bench_path', '.')
@@ -684,4 +689,17 @@ def set_git_remote_url(git_url, bench_path='.'):
 
 	app_dir = bench.app.get_repo_dir(app, bench_path=bench_path)
 	if os.path.exists(os.path.join(app_dir, '.git')):
+<<<<<<< HEAD
 		exec_cmd("git remote set-url upstream {}".format(git_url), cwd=app_dir)
+=======
+		exec_cmd("git remote set-url upstream {}".format(git_url), cwd=app_dir)
+
+def run_playbook(playbook_name, extra_vars=None):
+	if not find_executable('ansible'):
+		print "Ansible is needed to run this command, please install it using 'pip install ansible'"
+		sys.exit(1)
+	args = ['ansible-playbook', '-c', 'local', playbook_name]
+	if extra_vars:
+		args.extend(['-e', json.dumps(extra_vars)])
+	subprocess.check_call(args, cwd=os.path.join(os.path.dirname(bench.__path__[0]), 'playbooks'))
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863

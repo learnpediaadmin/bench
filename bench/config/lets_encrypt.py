@@ -1,18 +1,40 @@
 import bench, os, click, errno, urllib
 from bench.utils import exec_cmd, CommandFailedError
+<<<<<<< HEAD
 from bench.config.site_config import update_site_config
+=======
+from bench.config.site_config import update_site_config, remove_domain, get_domains
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 from bench.config.nginx import make_nginx_conf
 from bench.config.production_setup import service
 from bench.config.common_site_config import get_config
 from crontab import CronTab
 
+<<<<<<< HEAD
 def setup_letsencrypt(site, bench_path):
+=======
+def setup_letsencrypt(site, custom_domain, bench_path):
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 
 	site_path = os.path.join(bench_path, "sites", site, "site_config.json")
 	if not os.path.exists(os.path.dirname(site_path)):
 		print "No site named "+site
 		return
 
+<<<<<<< HEAD
+=======
+	if custom_domain:
+		domains = get_domains(site, bench_path)
+		for d in domains:
+			if (isinstance(d, dict) and d['domain']==custom_domain):
+				print "SSL for Domain {0} already exists".format(custom_domain)
+				return
+
+		if not custom_domain in domains:
+			print "No custom domain named {0} set for site".format(custom_domain)
+			return
+
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	click.confirm('Running this will stop the nginx service temporarily causing your sites to go offline\n'
 		'Do you want to continue?',
 		abort=True)
@@ -21,6 +43,7 @@ def setup_letsencrypt(site, bench_path):
 		print "You cannot setup SSL without DNS Multitenancy"
 		return
 
+<<<<<<< HEAD
 	create_config(site)
 	run_certbot_and_setup_ssl(site, bench_path)
 	setup_crontab()
@@ -29,23 +52,42 @@ def setup_letsencrypt(site, bench_path):
 def create_config(site):
 	config = bench.env.get_template('letsencrypt.cfg').render(domain=site)
 	config_path = '/etc/letsencrypt/configs/{site}.cfg'.format(site=site)
+=======
+	create_config(site, custom_domain)
+	run_certbot_and_setup_ssl(site, custom_domain, bench_path)
+	setup_crontab()
+
+
+def create_config(site, custom_domain):
+	config = bench.env.get_template('letsencrypt.cfg').render(domain=custom_domain or site)
+	config_path = '/etc/letsencrypt/configs/{site}.cfg'.format(site=custom_domain or site)
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	create_dir_if_missing(config_path)
 
 	with open(config_path, 'w') as f:
 		f.write(config)
 
 
+<<<<<<< HEAD
 def run_certbot_and_setup_ssl(site, bench_path):
+=======
+def run_certbot_and_setup_ssl(site, custom_domain, bench_path):
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	service('nginx', 'stop')
 	get_certbot()
 
 	try:
+<<<<<<< HEAD
 		exec_cmd("{path} --config /etc/letsencrypt/configs/{site}.cfg certonly".format(path=get_certbot_path(), site=site))
+=======
+		exec_cmd("{path} --config /etc/letsencrypt/configs/{site}.cfg certonly".format(path=get_certbot_path(), site=custom_domain or site))
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	except CommandFailedError:
 		service('nginx', 'start')
 		print "There was a problem trying to setup SSL for your site"
 		return
 
+<<<<<<< HEAD
 	ssl_path = "/etc/letsencrypt/live/{site}/".format(site=site)
 
 	ssl_config = { "ssl_certificate": os.path.join(ssl_path, "fullchain.pem"),
@@ -54,6 +96,22 @@ def run_certbot_and_setup_ssl(site, bench_path):
 	update_site_config(site, ssl_config, bench_path=bench_path)
 	make_nginx_conf(bench_path)
 
+=======
+	ssl_path = "/etc/letsencrypt/live/{site}/".format(site=custom_domain or site)
+	ssl_config = { "ssl_certificate": os.path.join(ssl_path, "fullchain.pem"),
+					"ssl_certificate_key": os.path.join(ssl_path, "privkey.pem") }
+
+	if custom_domain:
+		remove_domain(site, custom_domain, bench_path)
+		domains = get_domains(site, bench_path)
+		ssl_config['domain'] = custom_domain		
+		domains.append(ssl_config)
+		update_site_config(site, { "domains": domains }, bench_path=bench_path)
+	else:
+		update_site_config(site, ssl_config, bench_path=bench_path)
+	
+	make_nginx_conf(bench_path)
+>>>>>>> 2b6715594ee34acab4a55e4a639ce842f32d7863
 	service('nginx', 'start')
 
 
